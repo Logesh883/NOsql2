@@ -1,0 +1,140 @@
+#creating keyspace
+
+cqlsh> CREATE KEYSPACE shopping WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+
+cqlsh> USE shopping;
+
+#Creating table for customers
+
+cqlsh:shopping> CREATE TABLE customers(customer_id varchar PRIMARY KEY,first_name text,last_name text,email text,phone text,address text);
+
+#Inserting values
+
+cqlsh:shopping> INSERT INTO customers(customer_id, first_name, last_name, email, phone, address) VALUES ('c123', 'Logesh', 'S', 'logesh@gmail.com', '9876543210', 'Erode');
+
+cqlsh:shopping> INSERT INTO customers(customer_id, first_name, last_name, email, phone, address) VALUES ('c11', 'Hari', 'v', 'hari@gmail.com', '9874011234', 'Tirupur');
+
+cqlsh:shopping> INSERT INTO customers(customer_id, first_name, last_name, email, phone, address) VALUES ('c133', 'Logi', 'L', 'logi@gmail.com', '9429001717', 'Salem ');
+
+cqlsh:shopping> INSERT INTO customers(customer_id, first_name, last_name, email, phone, address) VALUES ('c132', 'Elango', 'R', 'elango@gmail.com', '9080768544', 'Erode');
+
+cqlsh:shopping> INSERT INTO customers(customer_id, first_name, last_name, email, phone, address) VALUES ('c142', 'Jaga', 'J', 'jaga@gmail.com', '7271023456', 'Perundurai');
+
+#Displaying values
+
+cqlsh:shopping> SELECT * FROM customers;
+
+
+ customer_id | address    | email            | first_name | last_name | phone
+-------------+------------+------------------+------------+-----------+------------
+        c133 |     Salem  |   logi@gmail.com |       Logi |         L | 9429001717
+        c123 |      Erode | logesh@gmail.com |     Logesh |         S | 9876543210
+        c132 |      Erode | elango@gmail.com |     Elango |         R | 9080768544
+        c142 | Perundurai |   jaga@gmail.com |       Jaga |         J | 7271023456
+         c11 |    Tirupur |   hari@gmail.com |       Hari |         v | 9874011234
+ 
+
+(5 rows)
+
+#Creating table for orders
+
+cqlsh:shopping> CREATE TABLE orders (order_id varchar PRIMARY KEY,customer_id varchar,order_date timestamp,total decimal);
+
+#Inserting values:
+
+cqlsh:shopping> INSERT INTO orders (order_id, customer_id, order_date, total) VALUES ('O11', 'c123', '2023-03-18 12:00:00', 100.00);
+
+cqlsh:shopping> INSERT INTO orders (order_id, customer_id, order_date, total) VALUES ('O123', 'c142', '2023-02-18 11:58:00', 300.00);
+
+cqlsh:shopping> INSERT INTO orders (order_id, customer_id, order_date, total) VALUES ('O23','c132' , '2023-03-18 11:59:30', 500.00);
+
+cqlsh:shopping> INSERT INTO orders (order_id, customer_id, order_date, total) VALUES ('0124', 'c11', '2023-03-17 10:59:00', 450.00);
+
+cqlsh:shopping> INSERT INTO orders (order_id, customer_id, order_date, total) VALUES ('0162', 'c133', '2023-03-17 10:58:00', 470.00);
+
+#Displaying values
+
+cqlsh:shopping> SELECT * FROM orders;
+
+ order_id | customer_id | order_date               | total
+----------+-------------+--------------------------+--------
+     0162 |        c133 | 2023-03-17 05:28:00+0000 | 470.00
+     0124 |         c11 | 2023-03-17 05:29:00+0000 | 450.00
+      O23 |        c132 | 2023-03-18 06:29:30+0000 | 500.00
+     O123 |        c142 | 2023-02-18 06:28:00+0000 | 300.00
+      O11 |        c123 | 2023-03-18 06:30:00+0000 | 100.00
+
+#Creating table for order_items 
+
+cqlsh:shopping> CREATE TABLE order_items (order_id varchar,product_id varchar,quantity int,price decimal,PRIMARY KEY (order_id, product_id));
+
+#Inserting values
+
+cqlsh:shopping> INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('0162', 'P12', 4, 200.00);
+
+cqlsh:shopping> INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('O23', 'P21', 2, 100.00);
+
+cqlsh:shopping> INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('O11', 'P232', 3, 140.00);
+
+cqlsh:shopping> INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('O123', 'P112', 4, 130.00);
+
+cqlsh:shopping> INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('0124', 'P052', 5, 160.00);
+
+#Displaying values
+
+cqlsh:shopping> SELECT*FROM order_items;
+
+ order_id | product_id | price  | quantity
+----------+------------+--------+----------
+     0162 |        P12 | 200.00 |        4
+     0124 |       P052 | 160.00 |        5
+      O23 |        P21 | 100.00 |        2
+     O123 |       P112 | 130.00 |        4
+      O11 |       P232 | 140.00 |        3
+
+#Perform Deletion
+
+cqlsh:shopping> DELETE FROM customers WHERE customer_id ='c11';
+
+cqlsh:shopping> DELETE FROM orders WHERE order_id='0124';
+
+#Perform Updation
+
+cqlsh:shopping>UPDATE customers SET first_name ='Jagadeesh',last_name='G' WHERE customer_id='c142';
+
+cqlsh:shopping>UPDATE orders SET total=160 WHERE order_id='0162';
+
+#Displaying values after updation and deletion operations
+
+cqlsh:shopping> SELECT *FROM customers;
+
+ customer_id | address    | email            | first_name | last_name | phone
+-------------+------------+------------------+------------+-----------+------------
+        c133 |     Salem  |   logi@gmail.com |       Logi |         L | 9429001717
+        c123 |      Erode | logesh@gmail.com |     Logesh |         S | 9876543210
+        c132 |      Erode | elango@gmail.com |     Elango |         R | 9080768544
+        c142 | Perundurai |   jaga@gmail.com |  Jagadeesh |         G | 7271023456
+
+(4 rows)
+
+cqlsh:shopping> SELECT *FROM orders;
+
+ order_id | customer_id | order_date               | total
+----------+-------------+--------------------------+--------
+     0162 |        c133 | 2023-03-17 05:28:00+0000 |    160
+      O23 |        c132 | 2023-03-18 06:29:30+0000 | 500.00
+     O123 |        c142 | 2023-02-18 06:28:00+0000 | 300.00
+      O11 |        c123 | 2023-03-18 06:30:00+0000 | 100.00
+
+(4 rows)
+
+cqlsh:shopping> SELECT *FROM order_items;
+
+ order_id | product_id | price  | quantity
+----------+------------+--------+----------
+     0162 |        P12 | 200.00 |        4
+     0124 |       P052 | 160.00 |        5
+      O23 |        P21 | 100.00 |        2
+     O123 |       P112 | 130.00 |        4
+      O11 |       P232 | 140.00 |        3
+
