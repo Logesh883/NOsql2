@@ -8,6 +8,7 @@ This is a sample customer order database created using Apache Cassandra.
 The database consists of three tables: 'customers','orders', and 'order_items'.
 
 customers
+
 The customers table contains information about each 'customer', including their 
                 first name, 
                 last name, 
@@ -16,12 +17,14 @@ The customers table contains information about each 'customer', including their
                 address.
                 
 orders
+
 The orders table contains information about each 'order', including the 
                 customer who placed the order, 
                 the order date, 
                 total amount.
             
 order_items
+
 The order_items table contains information about each item in an order, including the 
                 order it belongs to,  
                 the product it represents,  
